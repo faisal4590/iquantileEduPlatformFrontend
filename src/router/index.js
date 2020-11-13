@@ -4,15 +4,12 @@ import VueRouter from "vue-router";
 import Login from "../views/Login.vue";
 import VideoInfo from "../views/VideoInfo.vue";
 import AddVideo from "../views/AddVideo.vue";
+import VideoLists from "../views/VideoLists.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: Home
-  // },
+
   {
     path: '/',
     name: 'Login',
@@ -27,6 +24,12 @@ const routes = [
     path: "/add-video",
     name: "add-video",
     component: AddVideo,
+  }
+  ,
+  {
+    path: "/video-lists",
+    name: "video-lists",
+    component: VideoLists,
   }
 ];
 

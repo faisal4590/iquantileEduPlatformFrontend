@@ -12,7 +12,15 @@
       </v-btn>
 
       <v-btn icon>
+        <v-icon @click="videoLists()">mdi-mail</v-icon>
+      </v-btn>
+
+      <v-btn icon>
         <v-icon @click="videoInfo()">mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon @click="login()">mdi-login</v-icon>
       </v-btn>
 
       <v-btn icon>
@@ -50,6 +58,12 @@ export default {
     },
     videoInfo() {
       this.$router.push('/video-info');
+    },
+    videoLists() {
+      this.$router.push('/video-lists');
+    },
+    login() {
+      this.$router.push('/');
     },
   },
 };

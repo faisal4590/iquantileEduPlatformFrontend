@@ -16,6 +16,7 @@
           <form @submit="submitData" enctype="multipart/form-data">
             <v-layout row wrap>
               <v-flex xs6>
+                <!-- author name input -->
                 <v-text-field
                   v-model="name"
                   :error-messages="nameErrors"
@@ -27,11 +28,16 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs6>
+                <!-- file input -->
                 <v-file-input
                   show-size
                   counter
-                  label="File input"
+                  label="Add video"
+                  v-model="videoFile"
+                  accept="video/*"
                 ></v-file-input>
+                <!-- <input type="file" v-on:change="onFileChange" /> -->
+                <!-- submit button -->
                 <v-btn
                   class="mr-4"
                   @click="submit"
@@ -46,10 +52,23 @@
         </v-container>
       </v-row>
     </div>
+    <!-- toaster(snackbar) -->
+    <v-snackbar v-model="snackbar">
+      {{ responseResult }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+import * as env_const from '../conf/env_const.js';
+import axios from 'axios';
+
 import { validationMixin } from 'vuelidate';
 import { required, maxLength } from 'vuelidate/lib/validators';
 export default {
@@ -65,6 +84,9 @@ export default {
   data() {
     return {
       name: '',
+      videoFile: null,
+      responseResult: '',
+      snackbar: false,
     };
   },
   computed: {
@@ -84,7 +106,42 @@ export default {
     },
     submitData(e) {
       e.preventDefault();
-      alert('called');
+      //   alert(this.videoFile);
+
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+
+      let formData = new FormData();
+      formData.append('auth_token', 'test auth token');
+      formData.append('video_author', this.name);
+      formData.append('video_file', this.videoFile);
+      //   console.log(...formData);
+
+      // backend insert with api
+      let self = this;
+      let url = env_const.base_url + '/insert_videos';
+
+      axios
+        .post(url, formData, config)
+        .then((response) => {
+          console.log(response);
+          if (response.data.status == 200) {
+            //
+            self.responseResult = 'Data added successfully!';
+            self.snackbar = true;
+
+            // clear form data
+            self.name = '';
+            self.videoFile = null;
+          }
+        })
+        .catch(function() {
+          this.responseResult = 'Failed to add data!';
+          this.snackbar = true;
+        });
     },
   },
 };

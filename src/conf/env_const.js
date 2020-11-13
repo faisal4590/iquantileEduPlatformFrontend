@@ -1,0 +1,1 @@
+export const base_url = "http://localhost/iquantile_backend/public/api";
