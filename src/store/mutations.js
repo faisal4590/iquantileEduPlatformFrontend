@@ -23,13 +23,11 @@ export const mutations = {
     state.opened_video_id = video_id;
   },
   [types.LOGOUT](state) {
-    state.contributors_list = "";
     state.auth_token = "";
     state.user_id = "";
-    state.user_status = "";
+    state.access_level = "";
     state.opened_video_id = "";
-    state.video_lists = [];
-    state.tags_list = [];
-    state.contributors_list = [];
+    state.email = "";
+    state.age = "";
   },
 };

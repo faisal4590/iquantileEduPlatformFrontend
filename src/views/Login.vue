@@ -168,8 +168,8 @@ export default {
         var self = this;
         axios
           .post(url, {
-            user_id: this.user_id,
-            password: this.password,
+            user_id: this.loginUserID,
+            password: this.loginPassword,
           })
           .then(function(response) {
             // console.log(response);

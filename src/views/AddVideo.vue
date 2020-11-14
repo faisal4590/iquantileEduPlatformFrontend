@@ -5,8 +5,8 @@
       <!-- add a video title -->
       <v-row>
         <v-col cols="12" sm="12" md="12">
-          <v-card class="pa-2" outlined tile>
-            <p>Add a video</p>
+          <v-card class="pa-2 no-border-overflow" tile>
+            <h3>Add a video</h3>
           </v-card>
         </v-col>
       </v-row>
@@ -42,9 +42,17 @@
                   class="mr-4"
                   @click="submit"
                   type="submit"
-                  style="float:right"
+                  style="float:right; margin-top:5px;"
                 >
-                  submit
+                  <v-progress-circular
+                    v-if="loader"
+                    :size="20"
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                  <span v-else>
+                    Add video
+                  </span>
                 </v-btn>
               </v-flex>
             </v-layout>
@@ -87,6 +95,7 @@ export default {
       videoFile: null,
       responseResult: '',
       snackbar: false,
+      loader: false,
     };
   },
   computed: {
@@ -105,6 +114,19 @@ export default {
       this.$v.$touch();
     },
     submitData(e) {
+      // starting the loader
+      this.loader = true;
+
+      if (this.videoFile == null) {
+        e.preventDefault();
+        alert('please select a video file!');
+        this.responseResult = 'Failed to add video!';
+        this.snackbar = true;
+        // closing the loader
+        this.loader = false;
+        return;
+      }
+
       e.preventDefault();
       //   alert(this.videoFile);
 
@@ -136,13 +158,25 @@ export default {
             // clear form data
             self.name = '';
             self.videoFile = null;
+
+            // closing the loader
+            self.loader = false;
           }
         })
         .catch(function() {
           this.responseResult = 'Failed to add data!';
           this.snackbar = true;
+
+          // closing the loader
+          this.loader = false;
         });
     },
   },
 };
 </script>
+
+<style>
+.no-border-overflow {
+  box-shadow: none !important;
+}
+</style>

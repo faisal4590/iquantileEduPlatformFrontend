@@ -19,17 +19,26 @@ const routes = [
     path: "/video-info",
     name: "video-info",
     component: VideoInfo,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/add-video",
     name: "add-video",
     component: AddVideo,
+    meta: {
+      requiresAuth: true,
+    },
   }
   ,
   {
     path: "/video-lists",
     name: "video-lists",
     component: VideoLists,
+    meta: {
+      requiresAuth: true,
+    },
   }
 ];
 

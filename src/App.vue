@@ -6,17 +6,23 @@
 </template>
 
 <script>
-import Nav from "./views/Nav";
+import Nav from './views/Nav';
 
 export default {
-  name: "App",
+  name: 'App',
 
   components: {
-    Nav
+    Nav,
   },
 
   data: () => ({
     //
-  })
+  }),
 };
 </script>
+
+<style>
+body {
+  background-color: #f6f6f6;
+}
+</style>

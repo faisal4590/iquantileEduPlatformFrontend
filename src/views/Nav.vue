@@ -1,45 +1,35 @@
 <template>
   <div>
     <v-app-bar color="deep-purple accent-4" dense dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Page title</v-toolbar-title>
+      <v-toolbar-title>iQuantile StuHUB</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon @click="addVideo()">mdi-plus</v-icon>
+      <h4 icon title="user id" v-if="this.$store.state.auth_token">
+        {{ this.$store.state.user_id }}
+      </h4>
+
+      <v-btn
+        icon
+        title="Add video"
+        v-if="this.$store.state.access_level === 'admin'"
+      >
+        <v-icon @click="addVideo()">
+          mdi-plus
+        </v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon title="video list">
         <v-icon @click="videoLists()">mdi-mail</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon @click="videoInfo()">mdi-heart</v-icon>
+      </v-btn> -->
+
+      <v-btn icon v-if="this.$store.state.auth_token" title="logout">
+        <v-icon @click="logout()">mdi-logout</v-icon>
       </v-btn>
-
-      <v-btn icon>
-        <v-icon @click="login()">mdi-login</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-menu left bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item v-for="n in 5" :key="n" @click="() => {}">
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
     </v-app-bar>
   </div>
 </template>
@@ -62,7 +52,9 @@ export default {
     videoLists() {
       this.$router.push('/video-lists');
     },
-    login() {
+    logout() {
+      // clear state
+      this.$store.dispatch('logOut');
       this.$router.push('/');
     },
   },

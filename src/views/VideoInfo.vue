@@ -5,7 +5,6 @@
       <v-col cols="12" sm="6" md="8">
         <v-card class="video-container">
           <video
-            autoplay
             :src="this.singleVideoInfo.videoPath"
             controls
             class="video-file"
@@ -42,8 +41,11 @@
                 tile
                 style="margin-top: -25px;padding:3px 0 0 3px"
               >
-                <p>Top responses</p>
-                <div style="margin-top:10px;">
+                <h4>Top responses</h4>
+                <div
+                  style="margin-top:10px;"
+                  v-if="this.topResponses && this.topResponses.length"
+                >
                   <p
                     v-for="topResponse in this.topResponses"
                     v-bind:key="topResponse.id"
@@ -57,6 +59,9 @@
                     {{ topResponse.name }}
                   </p>
                 </div>
+                <div v-else style="padding:3px 0 3px 0">
+                  <p>No response found!. Please add a comment.</p>
+                </div>
               </v-card>
             </v-col>
 
@@ -66,7 +71,7 @@
                 tile
                 style="margin-top: -25px;text-align:center;padding:6px 0 0 3px"
               >
-                <p>View all</p>
+                <h4>View all</h4>
                 <div style="margin-top:10px">
                   <p
                     v-for="topResponse in this.topResponses"
@@ -83,9 +88,16 @@
               <v-card class="pa-2 no-border-overflow" tile>
                 <p>Average response rating</p>
                 <div style="margin-top:8px;margin-left:20px">
-                  <span style="margin-top:5px">{{
-                    parseFloat(this.averageResponseRating).toFixed(2)
-                  }}</span>
+                  <span
+                    style="margin-top:5px"
+                    v-if="this.averageResponseRating"
+                  >
+                    {{ parseFloat(this.averageResponseRating).toFixed(2) }}
+                  </span>
+                  <span v-else>
+                    <!-- no response(no comment added) -->
+                    0
+                  </span>
                   <v-rating
                     background-color="white"
                     color="yellow accent-4"
@@ -110,8 +122,11 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content class="text-content">
-                    <v-list-item-title>
+                    <v-list-item-title v-if="this.positiveResponse">
                       {{ this.positiveResponse }}% positive response
+                    </v-list-item-title>
+                    <v-list-item-title v-else>
+                      0.00% positive response
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -122,8 +137,11 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content class="text-content">
-                    <v-list-item-title>
+                    <v-list-item-title v-if="this.negativeResponse">
                       {{ this.negativeResponse }}% negative response
+                    </v-list-item-title>
+                    <v-list-item-title v-else>
+                      0.00% negative response
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -140,59 +158,64 @@
         <v-card class="pa-2 all-comments-card">
           <h3>All comments</h3>
           <!-- comment lists -->
-          <v-card
-            class="mx-auto single-comment"
-            outlined
-            v-for="singleComment in this.videoComments"
-            v-bind:key="singleComment.id"
-          >
-            <v-list-item>
-              <!-- comment left section -->
-              <v-list-item-avatar>
-                <v-img
-                  src="https://picsum.photos/350/165?random"
-                  class="comment-image"
-                ></v-img>
-              </v-list-item-avatar>
+          <div v-if="this.videoComments && this.videoComments.length">
+            <v-card
+              class="mx-auto single-comment"
+              outlined
+              v-for="singleComment in this.videoComments"
+              v-bind:key="singleComment.id"
+            >
+              <v-list-item>
+                <!-- comment left section -->
+                <v-list-item-avatar>
+                  <v-img
+                    src="https://picsum.photos/350/165?random"
+                    class="comment-image"
+                  ></v-img>
+                </v-list-item-avatar>
 
-              <v-list-item-content
-                class="comment-left-section-titles text-content"
-              >
-                <v-list-item-title>
-                  {{ singleComment.name }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <v-chip class="ma-2">
-                    {{ singleComment.age }}
-                  </v-chip>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <!-- comment right section -->
-              <v-list-item three-line style="margin-left:150px">
-                <v-list-item-content>
-                  <v-list-item-title class="headline mb-1">
-                    <span>
-                      {{ singleComment.rating }}
-                    </span>
-
-                    <v-rating
-                      background-color="white"
-                      color="yellow accent-4"
-                      dense
-                      half-increments
-                      size="14"
-                      style="margin-top:-5px; display:inline"
-                      :value="parseFloat(singleComment.rating)"
-                    >
-                    </v-rating>
+                <v-list-item-content
+                  class="comment-left-section-titles text-content"
+                >
+                  <v-list-item-title>
+                    {{ singleComment.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ singleComment.comment }}
+                    <v-chip class="ma-2">
+                      {{ singleComment.age }}
+                    </v-chip>
                   </v-list-item-subtitle>
                 </v-list-item-content>
+                <!-- comment right section -->
+                <v-list-item three-line style="margin-left:150px">
+                  <v-list-item-content>
+                    <v-list-item-title class="headline mb-1">
+                      <span>
+                        {{ singleComment.rating }}
+                      </span>
+
+                      <v-rating
+                        background-color="white"
+                        color="yellow accent-4"
+                        dense
+                        half-increments
+                        size="14"
+                        style="margin-top:-5px; display:inline"
+                        :value="parseFloat(singleComment.rating)"
+                      >
+                      </v-rating>
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ singleComment.comment }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
               </v-list-item>
-            </v-list-item>
-          </v-card>
+            </v-card>
+          </div>
+          <div v-else>
+            <p>No comments found! Please add a comment.</p>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -342,14 +365,20 @@ export default {
         // console.log(response.data.payload.video_comments);
         let videoCommentLists = response.data.payload.comment_lists;
         // console.log(videoCommentLists);
-        if (videoCommentLists !== null) {
+
+        if (videoCommentLists && videoCommentLists.length) {
+          //   alert('reached');
           for (var i = 0; i < videoCommentLists.length; i++) {
             self.videoComments.push(videoCommentLists[i]);
             // console.log(self.videoComments);
           }
 
           // updating top responses
-          var tempCommentsRating = self.videoComments;
+          var tempCommentsRating = [];
+          for (var pk = 0; pk < self.videoComments.length; pk++) {
+            tempCommentsRating[pk] = self.videoComments[pk];
+          }
+
           // sorting comments based on ratings
           tempCommentsRating.sort((a, b) => b.rating.localeCompare(a.rating));
           //   console.log(self.videoComments);
@@ -362,6 +391,7 @@ export default {
               self.topResponses.push(tempCommentsRating[k]);
             }
           }
+          // console.log(self.videoComments);
 
           // updating average response rating
           var sum = 0;
@@ -447,7 +477,12 @@ export default {
 
               // updating top responses
               self.topResponses = [];
-              var tempCommentsRating = self.videoComments;
+
+              var tempCommentsRating = [];
+              for (var pk = 0; pk < self.videoComments.length; pk++) {
+                tempCommentsRating[pk] = self.videoComments[pk];
+              }
+
               // sorting comments based on ratings
               tempCommentsRating.sort((a, b) =>
                 b.rating.localeCompare(a.rating)
@@ -540,9 +575,11 @@ export default {
 }
 .video-author {
   margin-top: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
 }
 .video-author:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
 .text-content {
@@ -551,13 +588,16 @@ export default {
 .all-comments-card,
 .add-comment-card,
 .no-border-overflow {
+  background-color: #f6f6f6 !important;
   box-shadow: none !important;
 }
 .single-comment {
   margin-top: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
 }
 .single-comment:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
 v-chip {
