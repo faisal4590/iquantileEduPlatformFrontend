@@ -35,8 +35,18 @@
                   label="Add video"
                   v-model="videoFile"
                   accept="video/*"
-                ></v-file-input>
-                <!-- <input type="file" v-on:change="onFileChange" /> -->
+                >
+                </v-file-input>
+              </v-flex>
+              <!-- video description -->
+              <v-flex xs6>
+                <v-textarea
+                  name="input-7-1"
+                  label="video description"
+                  hint="video description"
+                  v-model="videoDescription"
+                >
+                </v-textarea>
                 <!-- submit button -->
                 <v-btn
                   class="mr-4"
@@ -96,6 +106,7 @@ export default {
       responseResult: '',
       snackbar: false,
       loader: false,
+      videoDescription: '',
     };
   },
   computed: {
@@ -127,6 +138,16 @@ export default {
         return;
       }
 
+      if (this.videoDescription == '') {
+        e.preventDefault();
+        alert('please add description!');
+        this.responseResult = 'Failed to add video!';
+        this.snackbar = true;
+        // closing the loader
+        this.loader = false;
+        return;
+      }
+
       e.preventDefault();
       //   alert(this.videoFile);
 
@@ -140,6 +161,7 @@ export default {
       formData.append('auth_token', 'test auth token');
       formData.append('video_author', this.name);
       formData.append('video_file', this.videoFile);
+      formData.append('video_description', this.videoDescription);
       //   console.log(...formData);
 
       // backend insert with api
@@ -158,6 +180,7 @@ export default {
             // clear form data
             self.name = '';
             self.videoFile = null;
+            self.videoDescription = '';
 
             // closing the loader
             self.loader = false;

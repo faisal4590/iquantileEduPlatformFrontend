@@ -199,39 +199,62 @@ export default {
       this.login = false;
     },
     registerSubmit() {
-      let formData = new FormData();
-      formData.append('auth_token', 'test auth token');
-      formData.append('user_id', this.user_id);
-      formData.append('email', this.email);
-      formData.append('age', this.age);
-      formData.append('password', this.password);
-      formData.append('access_level', 'user');
-      //   console.log(...formData);
+      let validationError = '';
 
-      // backend insert with api
-      let self = this;
-      let url = env_const.base_url + '/add_user';
+      if (this.user_id == '') {
+        validationError += 'Please add username. \n';
+      }
 
-      axios
-        .post(url, formData)
-        .then((response) => {
-          console.log(response);
-          if (response.data.status == 200) {
-            // clear registration form data
-            self.user_id = '';
-            self.email = '';
-            self.age = null;
-            self.password = '';
+      if (this.email == '') {
+        validationError += 'Please add email. \n';
+      }
 
-            // load login data
-            self.registration = false;
-            self.login = true;
+      if (this.age == null) {
+        validationError += 'Please add age. \n';
+      }
 
-            self.loginUserID = self.user_id;
-            self.loginPassword = self.password;
-          }
-        })
-        .catch(function() {});
+      if (this.password == '') {
+        validationError += 'Please add password. \n';
+      }
+
+      if (validationError != '') {
+        alert(validationError);
+        return;
+      } else {
+        let formData = new FormData();
+        formData.append('auth_token', 'test auth token');
+        formData.append('user_id', this.user_id);
+        formData.append('email', this.email);
+        formData.append('age', this.age);
+        formData.append('password', this.password);
+        formData.append('access_level', 'user');
+        //   console.log(...formData);
+
+        // backend insert with api
+        let self = this;
+        let url = env_const.base_url + '/add_user';
+
+        axios
+          .post(url, formData)
+          .then((response) => {
+            console.log(response);
+            if (response.data.status == 200) {
+              // clear registration form data
+              self.user_id = '';
+              self.email = '';
+              self.age = null;
+              self.password = '';
+
+              // load login data
+              self.registration = false;
+              self.login = true;
+
+              self.loginUserID = self.user_id;
+              self.loginPassword = self.password;
+            }
+          })
+          .catch(function() {});
+      }
     },
   },
 };

@@ -6,13 +6,15 @@
       <v-row>
         <v-col cols="12" sm="12" md="12">
           <v-card class="pa-2 no-border-overflow" tile>
-            <h2>All videos</h2>
+            <h2 v-if="this.videoLists && this.videoLists.length">All videos</h2>
+            <h2 v-else style="text-align:center;">No video found!</h2>
           </v-card>
         </v-col>
       </v-row>
 
       <v-row>
         <!-- video lists -->
+
         <v-col
           cols="12"
           sm="12"

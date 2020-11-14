@@ -23,8 +23,7 @@
                 this.singleVideoInfo.videoAuthor
               }}</v-list-item-title>
               <v-list-item-subtitle>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum
-                dolorem temporibus totam?
+                {{ this.singleVideoInfo.videoDescription }}
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -118,30 +117,39 @@
                 <p>Sentiment</p>
                 <v-list-item>
                   <v-list-item-avatar>
-                    <v-img src="https://picsum.photos/350/165?random"></v-img>
+                    <v-img src="https://iili.io/FBMVt9.png"></v-img>
+                    <!-- <img src="../../public/img/positive.PNG" /> -->
                   </v-list-item-avatar>
 
                   <v-list-item-content class="text-content">
                     <v-list-item-title v-if="this.positiveResponse">
-                      {{ this.positiveResponse }}% positive response
+                      <span style="color:#46B053;font-weight:bold;">
+                        {{ this.positiveResponse }}%
+                      </span>
+                      positive response
                     </v-list-item-title>
                     <v-list-item-title v-else>
-                      0.00% positive response
+                      <span style="color:#46B053;font-weight:bold;">0.00%</span>
+                      positive response
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item>
                   <v-list-item-avatar>
-                    <v-img src="https://picsum.photos/350/165?random"></v-img>
+                    <v-img src="https://iili.io/FBM08l.png"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content class="text-content">
                     <v-list-item-title v-if="this.negativeResponse">
-                      {{ this.negativeResponse }}% negative response
+                      <span style="color:#DA7377;font-weight:bold;">
+                        {{ this.negativeResponse }}%
+                      </span>
+                      negative response
                     </v-list-item-title>
                     <v-list-item-title v-else>
-                      0.00% negative response
+                      <span style="color:#DA7377;font-weight:bold;">0.00%</span>
+                      negative response
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -311,6 +319,7 @@ export default {
       singleVideoInfo: {
         videoAuthor: '',
         videoPath: '',
+        videoDescription: '',
       },
       defaultRating: 5, //default_rating
       rating: null,
@@ -325,6 +334,7 @@ export default {
       averageResponseRating: null,
       positiveResponse: null,
       negativeResponse: null,
+      postivieImageName: 'positive.PNG',
     };
   },
   components: {
@@ -347,6 +357,8 @@ export default {
           response.data.payload.single_video_info.video_author;
         self.singleVideoInfo.videoPath =
           response.data.payload.single_video_info.video_path;
+        self.singleVideoInfo.videoDescription =
+          response.data.payload.single_video_info.video_description;
         self.name = self.$store.state.user_id;
         self.age = self.$store.state.age;
         self.email = self.$store.state.email;
